@@ -1,0 +1,23 @@
+Ricardo Muchacho Ci 27849052
+
+Los request con curl serian:
+
+Register:
+curl -X POST http://localhost:5010/register -H "Content-Type: application/json" -d '{"username": "ricky", "pass": "123"}' | json_pp
+
+
+
+Login (copiar token):
+curl -X POST http://localhost:6000/mobile/auth/login -H 'Content-Type: application/json' -d '{"username":"ricky","pass":"123"}'| json_pp
+
+Get Animals:
+curl -H 'x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjI0ZTI1MjNiY2Q4ZGI1ZTI3MzYzYTY5IiwidXNlcm5hbWUiOiJyaWNreSIsImlhdCI6MTY0OTI4ODY2MiwiZXhwIjoxNjQ5Mjk1ODYyfQ.ZGYVdPmxFa4I9XjG0WXQz96iBstOMoP3djNUsODbTwA' http://localhost:6000/desktop/api/animals | json_pp
+
+Post Animal:
+curl -X POST http://localhost:4000/animals -H 'Content-Type: application/json' -H 'x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjIyMmI0ZjQ4ZWQ5OWYyZmU4ODBmZjgxIiwidXNlcm5hbWUiOiJqYWltZSIsImlhdCI6MTY0NjQ0MTcxNiwiZXhwIjoxNjQ2NDQ4OTE2fQ.FIUXiQG76ciNf5RgTXCGuXJs8b3YJWmi4cWxqec67dg' -d '{"name":"snake"}'| json_pp
+
+Delete Animal
+curl -X DELETE http://localhost:4000/animals -H 'Content-Type: application/json' -H 'x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjIyMmI0ZjQ4ZWQ5OWYyZmU4ODBmZjgxIiwidXNlcm5hbWUiOiJqYWltZSIsImlhdCI6MTY0NjQ0MTcxNiwiZXhwIjoxNjQ2NDQ4OTE2fQ.FIUXiQG76ciNf5RgTXCGuXJs8b3YJWmi4cWxqec67dg' -d '{"name":"snake"}'| json_pp
+
+Update Animal
+curl -X PUT http://localhost:4000/animals -H 'Content-Type: application/json' -H 'x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjIyMmI0ZjQ4ZWQ5OWYyZmU4ODBmZjgxIiwidXNlcm5hbWUiOiJqYWltZSIsImlhdCI6MTY0NjQ0MTcxNiwiZXhwIjoxNjQ2NDQ4OTE2fQ.FIUXiQG76ciNf5RgTXCGuXJs8b3YJWmi4cWxqec67dg' -d '{"prev_name": "cat","new_name": "bird"}'| json_pp

@@ -1,0 +1,41 @@
+version: "3"
+
+networks:
+  my-network:
+    driver: bridge
+
+services:
+  haproxy:
+    image: haproxy
+    volumes:
+      - ./haproxy:/usr/local/etc/haproxy # ruta del archivo de configuración de haproxy
+    ports:
+      - "8080:80" # Conversión de puerto
+    expose:
+      - 80 # puerto expuesto haproxy
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    command: "redis-server"
+
+  users_api:
+    build: ./users_api
+    ports:
+      - "4000:4000"
+
+  posts_api:
+    build: ./posts_api
+    ports:
+      - "3001:3001"
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: "redis"
+      REDIS_PORT: 6379
+
+      links: "redis"
+    volumes:
+      - ./:/src
