@@ -6,7 +6,7 @@ networks:
 
 services:
   log:
-    container_name: elk
+    container_name: ev3_elk
     build: ./misc/elk
     ports:
       - "5601:5601"
@@ -23,16 +23,7 @@ services:
     build: ./haproxy
     depends_on:
       - users_api
-      - animals_api
-    networks:
-      - network1
-
-  redis:
-    image: redis:latest
-    restart: always
-    ports:
-      - "6379:6379"
-    command: "redis-server"
+      - posts_api
     networks:
       - network1
 
@@ -57,9 +48,16 @@ services:
       - "3001:3001"
     depends_on:
       - log
+      - redis
     environment:
       - MONGO_URI=${MONGO_URI}
       - TOKEN_KEY=${TOKEN_KEY}
       - LOGSTASH=${LOGSTASH}
+    networks:
+      - network1
+
+  redis:
+    container_name: ev3_redis
+    image: redis:alpine
     networks:
       - network1

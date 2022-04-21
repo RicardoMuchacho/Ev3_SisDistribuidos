@@ -14,7 +14,12 @@ const server = express();
 const DEFAULT_EXPIRATION = 3600;
 
 mongoose.set("useFindAndModify", false);
-const client = redis.createClient();
+
+/*
+const client = redis.createClient({
+  host: "ev3_redis",
+  port: 6379,
+});
 
 (async () => {
   client.on("error", (err) => console.log("Redis Client Error", err));
@@ -23,7 +28,7 @@ const client = redis.createClient();
 
   //await client.set("why", "value");
 })();
-
+*/
 const Logger = function (req, res, next) {
   log("info", "request-incoming", {
     path: req.url,
@@ -45,6 +50,7 @@ server.get("/post/", async (req, res) => {
 });
 
 server.get("/post/posts", async (req, res) => {
+  /*
   const posts = await client.get("posts");
   if (posts != null) {
     return res.json(JSON.parse(posts));
@@ -54,6 +60,10 @@ server.get("/post/posts", async (req, res) => {
     client.setEx("posts", DEFAULT_EXPIRATION, JSON.stringify(data));
     res.json(data);
   }
+*/
+  const data = await Post.find();
+  console.log(data);
+  res.json(data);
 
   /*
   client.get("posts", async (error, posts) => {
