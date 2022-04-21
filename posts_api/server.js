@@ -137,6 +137,17 @@ async function getSetCache(key, cb) {
   });
 }
 
+server.use("*", (req, res) => {
+  res.status(404).json({
+    success: "false",
+    message: "Page not found",
+    error: {
+      statusCode: 404,
+      message: "You reached a route that is not defined on this server",
+    },
+  });
+});
+
 const PORT = process.env.PORT || "3001";
 const HOST = process.env.HOST || "127.0.0.1";
 

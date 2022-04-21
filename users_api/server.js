@@ -145,41 +145,6 @@ server.delete("/admin/delete", auth, async (req, res) => {
   res.json({ Deleted: r });
 });
 
-server.post("/like", auth, async (req, res) => {
-  const { username, post_id } = req.body;
-
-  const query = { name: username };
-
-  const like = await Post.findByIdAndUpdate(
-    post_id,
-    { $inc: { likes: 1 } },
-    { new: true }
-  );
-  console.log(like);
-
-  var r = await User.findOneAndUpdate(
-    query,
-    { $push: { likes: { post_id } } },
-    {
-      new: true,
-    }
-  );
-  res.send(JSON.stringify(r));
-});
-
-server.post("/comment", auth, async (req, res) => {
-  const { username, post_id, description } = req.body;
-
-  r = await Post.findByIdAndUpdate(
-    post_id,
-    { $push: { comments: { description: description, username: username } } },
-    {
-      new: true,
-    }
-  );
-  res.send(JSON.stringify(r));
-});
-
 server.get("/health", async () => {
   console.log("health check");
   return "OK";
