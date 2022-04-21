@@ -6,7 +6,7 @@ networks:
 
 services:
   log:
-    container_name: ev3_elk
+    container_name: elk3
     build: ./misc/elk
     ports:
       - "5601:5601"
