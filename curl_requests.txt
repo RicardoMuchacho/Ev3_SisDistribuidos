@@ -3,8 +3,7 @@ Ricardo Muchacho Ci 27849052
 Los request con curl serian:
 
 Register:
-curl -X POST http://localhost:5010/register -H "Content-Type: application/json" -d '{"username": "ricky", "pass": "123"}' | json_pp
-
+curl -X POST http://localhost:6000/register -H "Content-Type: application/json" -d '{"username": "ricky", "pass": "123"}' | json_pp
 
 
 Login (copiar token):

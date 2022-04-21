@@ -1,18 +1,31 @@
 version: "3"
 
 networks:
-  my-network:
+  network1:
     driver: bridge
 
 services:
-  haproxy:
-    image: haproxy
-    volumes:
-      - ./haproxy:/usr/local/etc/haproxy # ruta del archivo de configuración de haproxy
+  log:
+    container_name: elk
+    build: ./misc/elk
     ports:
-      - "8080:80" # Conversión de puerto
-    expose:
-      - 80 # puerto expuesto haproxy
+      - "5601:5601"
+      - "9200:9200"
+      - "5044:5044"
+      - "7777:7777/udp"
+    networks:
+      - network1
+
+  haproxy:
+    container_name: proxy
+    ports:
+      - "6000:6000"
+    build: ./haproxy
+    depends_on:
+      - users_api
+      - animals_api
+    networks:
+      - network1
 
   redis:
     image: redis:latest
@@ -20,22 +33,33 @@ services:
     ports:
       - "6379:6379"
     command: "redis-server"
+    networks:
+      - network1
 
   users_api:
+    container_name: users_api
     build: ./users_api
     ports:
       - "4000:4000"
+    depends_on:
+      - log
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - TOKEN_KEY=${TOKEN_KEY}
+      - LOGSTASH=${LOGSTASH}
+    networks:
+      - network1
 
   posts_api:
+    container_name: posts_api
     build: ./posts_api
     ports:
       - "3001:3001"
     depends_on:
-      - redis
+      - log
     environment:
-      REDIS_HOST: "redis"
-      REDIS_PORT: 6379
-
-      links: "redis"
-    volumes:
-      - ./:/src
+      - MONGO_URI=${MONGO_URI}
+      - TOKEN_KEY=${TOKEN_KEY}
+      - LOGSTASH=${LOGSTASH}
+    networks:
+      - network1
